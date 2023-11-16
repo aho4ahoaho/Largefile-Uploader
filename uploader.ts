@@ -6,6 +6,7 @@ import fs from "fs";
 const router = Router();
 
 if (process.env.DEBUG == "true") {
+  console.log("DEBUG MODE");
   fs.readdirSync("./files")
     .filter((file) => !file.startsWith("."))
     .forEach((file) => {
@@ -45,7 +46,17 @@ router.post("/", upload.single("file"), (req, res) => {
   res.send("Hello");
 });
 
-const acceptFileExtensions = ["jpg", "jpeg", "png", "gif", "mp4", "avi", "mkv"];
+const acceptFileExtensions = [
+  "jpg",
+  "jpeg",
+  "png",
+  "gif",
+  "mp4",
+  "avi",
+  "mkv",
+  "pdf",
+];
+
 router.get("/prefix", (req, res) => {
   const ext = req.query.ext as string | null;
   if (ext == null || !acceptFileExtensions.includes(ext)) {

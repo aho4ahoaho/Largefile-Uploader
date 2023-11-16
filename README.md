@@ -1,15 +1,28 @@
 # largefile-uploader
 
-To install dependencies:
+大きなファイルをアップロードするテストのプロジェクト
+
+# 実行
 
 ```bash
 bun install
+bun start
 ```
 
-To run:
+# 注意点
 
-```bash
-bun run index.ts
+以下の様な記述があるが、これは Bun の`ReadStream`には pipe のバグがあるため回避しているためで、
+本来は`readStream.pipe(writeStream,{end:false})`だけでコピー出来るはず。
+
+```JavaScript
+const readStream = fs.createReadStream(file);
+if (!readStream.readable) {
+    reject("Not Readable");
+}
+readStream.on("data", (chunk) => {
+    writeStream.write(chunk);
+});
+readStream.on("end", () => {
+    resolve(null);
+});
 ```
-
-This project was created using `bun init` in bun v1.0.7. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
